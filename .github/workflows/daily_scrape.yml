@@ -1,0 +1,70 @@
+name: Daily Gaijin Market Scraper & Deploy
+
+on:
+  schedule:
+    # 每天北京时间凌晨 04:00 自动执行 (12:00 +0800 对应 UTC 20:00)
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+    # 支持用户在 GitHub 网页上随时手动一键触发运行
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  scrape_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests beautifulsoup4
+
+      - name: Run Python Scraper
+        # 运行我们编写的高并发爬虫获取最新价格
+        run: python scraper.py
+
+      - name: Run Analytics
+        # 运行原有分析脚本生成最新的 report.html
+        run: python analyze.py
+
+      - name: Prepare HTML for GitHub Pages
+        # 将生成的 report.html 复制为 index.html 以便默认主页访问
+        run: cp report.html index.html
+
+      - name: Commit and Push Changes
+        # 将生成的最新市场数据和报告自动提交推送到仓库
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gaijin_market_*.json report.html index.html
+          git diff-index --quiet HEAD || git commit -m "chore: 自动更新今日大盘数据及分析报告 [$(date +'%Y-%m-%d')]"
+          git push
+
+      - name: Upload Artifact
+        # 将 index.html 部署至 GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  deploy:
+    needs: scrape_and_deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
