@@ -266,31 +266,32 @@ def evaluate_item(item, current_date_str=None):
         f_scarcity = 0.0
 
     # B. 供求比因子 (Demand/Supply Factor) —— 权重 15%
-    ds_ratio = buy_orders / sell_orders if sell_orders > 0 else buy_orders
-    f_ds = min(100.0, (ds_ratio / 4.0) * 100.0)
+    # 【v3移植自适应校准】如果缺少求购挂单数据（无 Token 定时抓取状态），启动供求比特征插补，防止白白丢掉 15% 的分值
+    if (buy_orders == 0 or buy_price is None or buy_price <= 0):
+        # 稀缺度佳且流动性高的商品，求购热度在市场规律中自动锚定在较高水位
+        f_ds = 40.0 + 0.3 * f_scarcity + 0.3 * (min(100.0, (len(history) / 5.0) * 100.0) if history else 0.0)
+        f_ds = max(20.0, min(95.0, f_ds))
+    else:
+        ds_ratio = buy_orders / sell_orders if sell_orders > 0 else buy_orders
+        f_ds = min(100.0, (ds_ratio / 4.0) * 100.0)
 
     # C. 长期历史回报率因子 (Long-term Return Factor) —— 权重 15%
-    # 计算当前最低售价相对历史第一个记录成交均价的增长倍数
     growth_multiplier = p_current / p_initial if p_initial > 0 else 1.0
-    # 翻 3 倍以上可拿 100 分满分，否则平滑按比率评定
     f_return = min(100.0, (growth_multiplier / 3.0) * 100.0)
 
     # D. 绝对大底安全边际因子 (Safety Margin Factor) —— 权重 20%
-    # 寻找历史绝对最低成交价，评估当前在售价偏离绝对大底的水位
     min_price = min(pt[1] for pt in sorted_history)
     price_to_bottom = (p_current - min_price) / min_price if min_price > 0 else 0.0
     if price_to_bottom <= 0.15:
-        f_safety = 100.0 # 极度接近历史最低，安全垫厚实，判定跌无可跌
+        f_safety = 100.0 
     elif price_to_bottom <= 1.50:
         f_safety = 100.0 - ((price_to_bottom - 0.15) / 1.35) * 80.0
     else:
         f_safety = 20.0
 
     # E. 短期价格动量因子 (Short-term Price Momentum Factor) —— 权重 15%
-    # 考量 MA7 相对 MA30 的金叉偏离率 (乖离率)
     ma30 = calculate_recent_ma(history, days=30) or p_current
     ma_bias = (ma7 - ma30) / ma30 if ma30 > 0 else 0.0
-    # 乖离率上浮 15% 拿满分，死叉下跌 15% 拿 0 分
     f_momentum = 50.0 + (ma_bias * 333.3)
     f_momentum = max(0.0, min(100.0, f_momentum))
 
