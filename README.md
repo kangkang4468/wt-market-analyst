@@ -1,1 +1,1 @@
-页面地址：https://github.com/kangkang4468/wt-market-analyst/actions/runs/26569005686
+页面地址：https://kangkang4468.github.io/wt-market-analyst/
