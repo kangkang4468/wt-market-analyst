@@ -9,7 +9,9 @@ on:
       - 'gaijin_market_*.json'
       - 'gaijin_inventory_*.json'
       - 'inventory_meta.json'
+      - '*.py'
       - '.github/workflows/**'
+
   schedule:
     # 每天北京时间凌晨 04:00 自动执行 (12:00 +0800 对应 UTC 20:00)
     - cron: '0 20 * * *'
