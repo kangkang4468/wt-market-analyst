@@ -1,11 +1,21 @@
 name: Daily Gaijin Market Scraper & Deploy
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      # 仅在数据 JSON 文件、元数据文件或工作流自身发生变动时触发自动部署
+      - 'gaijin_market_*.json'
+      - 'gaijin_inventory_*.json'
+      - 'inventory_meta.json'
+      - '.github/workflows/**'
   schedule:
     # 每天北京时间凌晨 04:00 自动执行 (12:00 +0800 对应 UTC 20:00)
     - cron: '0 20 * * *'
   workflow_dispatch:
     # 支持用户在 GitHub 网页上随时手动一键触发运行
+
 
 permissions:
   contents: write
