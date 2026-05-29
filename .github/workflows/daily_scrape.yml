@@ -6,8 +6,8 @@ on:
       - main
     paths:
       # 仅在数据 JSON 文件、元数据文件或工作流自身发生变动时触发自动部署
-      - 'gaijin_market_*.json'
-      - 'gaijin_inventory_*.json'
+      - 'daily_json/gaijin_market_*.json'
+      - 'daily_json/gaijin_inventory_*.json'
       - 'inventory_meta.json'
       - '*.py'
       - '.github/workflows/**'
@@ -59,7 +59,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add gaijin_market_*.json report.html index.html
+          git add daily_json/gaijin_market_*.json report.html index.html
           git diff-index --quiet HEAD || git commit -m "chore: 自动更新今日大盘数据及分析报告 [$(date +'%Y-%m-%d')]"
           git push
 
