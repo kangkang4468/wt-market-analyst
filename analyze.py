@@ -483,15 +483,15 @@ def main():
     print("=" * 50)
     
     # 1. 查找所有的数据导出文件
-    json_files = [f for f in glob.glob("gaijin_market_*.json") if not f.endswith('.bak')]
+    json_files = [f for f in glob.glob(os.path.join("daily_json", "gaijin_market_*.json")) if not f.endswith('.bak')]
     
     if not json_files:
         print("\n[错误] 未找到任何导出的市场 JSON 数据文件。")
         print("\n请按以下步骤操作：")
         print("1. 用 Chrome 浏览器登录 https://trade.gaijin.net/?category=vehicles")
         print("2. 按 F12 打开开发者工具，在 Console (控制台) 中运行 exporter.js 脚本")
-        print("3. 将下载的 JSON 数据文件移动到当前脚本所在的目录下:")
-        print(f"   {os.getcwd()}")
+        print("3. 将下载的 JSON 数据文件移动到当前脚本所在目录的 daily_json 文件夹下:")
+        print(f"   {os.path.join(os.getcwd(), 'daily_json')}")
         print("4. 重新运行此 Python 脚本。")
         return
         
@@ -723,13 +723,14 @@ def main():
         final_content = final_content.replace("{{HISTORY_TREND_JSON}}", json_trend_str)
         final_content = final_content.replace("{{HISTORY_SNAPSHOTS_JSON}}", json_snapshots_str)
         
-        # 写入 report.html
-        with open(report_path, 'w', encoding='utf-8') as rf:
-            rf.write(final_content)
+        # 写入 report.html 同时也更新 index.html 确保 GitHub Pages 看板最新
+        for path in [report_path, "index.html"]:
+            with open(path, 'w', encoding='utf-8') as rf:
+                rf.write(final_content)
             
         print("\n" + "=" * 50)
-        print(f"[成功] 可视化分析大盘报告已生成: {report_path}")
-        print("请在浏览器中直接双击打开 report.html 查看华丽的黑金分析面板！")
+        print(f"[成功] 可视化分析大盘报告已同步生成: {report_path} & index.html")
+        print("请在浏览器中直接双击打开 report.html 或 index.html 查看华丽的黑金分析面板！")
         print("=" * 50)
         
     except Exception as e:
