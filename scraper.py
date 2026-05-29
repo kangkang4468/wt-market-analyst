@@ -37,7 +37,7 @@ def get_known_vehicles():
             print(f"[警告] 读取 market_meta.json 失败: {e}")
 
     # 兜底：从最近的 json 数据中解析
-    json_files = glob.glob("gaijin_market_*.json")
+    json_files = glob.glob(os.path.join("daily_json", "gaijin_market_*.json"))
     if json_files:
         latest_file = max(json_files, key=os.path.getmtime)
         try:
@@ -208,7 +208,9 @@ def main():
             
     # 保存结果
     date_str = datetime.utcnow().strftime("%Y-%m-%d")
-    output_filename = f"gaijin_market_{date_str}.json"
+    # 确保 daily_json 文件夹存在
+    os.makedirs("daily_json", exist_ok=True)
+    output_filename = os.path.join("daily_json", f"gaijin_market_{date_str}.json")
     
     with open(output_filename, "w", encoding="utf-8") as f:
         json.dump(scraped_data, f, ensure_ascii=False, indent=4)
