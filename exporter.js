@@ -363,7 +363,7 @@
                     const result = dataStat.result || dataStat.response || dataStat;
                     const rawHistory = result["1d"] || [];
                     priceHistory = rawHistory.map(pt => {
-                        return [pt[0] * 1000, parseFloat(pt[1]) / 10000];
+                        return pt.length >= 3 ? [pt[0] * 1000, parseFloat(pt[1]) / 10000, parseInt(pt[2])] : [pt[0] * 1000, parseFloat(pt[1]) / 10000];
                     });
                 }
 

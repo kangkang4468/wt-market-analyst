@@ -131,7 +131,7 @@ def fetch_single_vehicle(name, url, token):
             stat_data = res_stat.json()
             result = stat_data.get("result", stat_data.get("response", stat_data))
             raw_history = result.get("1d", [])
-            price_history = [[pt[0] * 1000, float(pt[1]) / 10000] for pt in raw_history]
+            price_history = [[pt[0] * 1000, float(pt[1]) / 10000, int(pt[2])] if len(pt) >= 3 else [pt[0] * 1000, float(pt[1]) / 10000] for pt in raw_history]
 
         time.sleep(random.uniform(*DELAY_RANGE))
         

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gaijin 市场载具大盘分析与投资趋势回溯面板</title>
+    <title>Gaijin 市场大盘分析与量化投资仪表盘</title>
     <!-- 引入高质感现代字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <!-- 引入 Chart.js -->
@@ -151,161 +151,117 @@
             position: absolute;
             top: calc(100% + 8px);
             right: 0;
-            background: rgba(15, 16, 19, 0.96);
-            border: 1px solid rgba(224, 169, 109, 0.25);
+            width: 320px;
+            max-height: 420px;
+            overflow-y: auto;
+            background: #181a22;
+            border: 1px solid var(--gold);
             border-radius: 12px;
-            padding: 12px;
-            width: 310px;
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 25px rgba(224, 169, 109, 0.08);
-            backdrop-filter: blur(10px);
-            transform: translateY(-10px) scale(0.95);
+            padding: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 25px rgba(224, 169, 109, 0.2);
             opacity: 0;
-            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            transform-origin: top right;
-        }
-        .custom-dropdown.show-menu .dropdown-menu {
-            display: flex;
-            transform: translateY(0) scale(1);
-            opacity: 1;
-        }
-        .dropdown-card-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            padding: 10px 14px;
-            cursor: pointer;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.98);
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            text-align: left;
+            gap: 8px;
+        }
+        .custom-dropdown.show-menu .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .dropdown-card-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         .dropdown-card-item:hover {
-            background: rgba(224, 169, 109, 0.05);
+            background: rgba(224, 169, 109, 0.08);
             border-color: rgba(224, 169, 109, 0.4);
-            transform: translateX(-4px) translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 8px rgba(224, 169, 109, 0.1);
+            transform: translateX(4px);
         }
         .dropdown-card-item.active {
-            background: rgba(224, 169, 109, 0.08);
+            background: rgba(224, 169, 109, 0.15);
             border-color: var(--gold);
-            box-shadow: 0 0 12px rgba(224, 169, 109, 0.15);
+            box-shadow: inset 0 0 10px rgba(224, 169, 109, 0.1);
         }
 
-        /* 顶部 KPI 卡片 */
+        /* 顶部统计卡片 */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
             gap: 20px;
             margin-bottom: 32px;
         }
 
         .stat-card {
-            background: radial-gradient(circle 120px at var(--x, 50%) var(--y, 50%), rgba(224, 169, 109, 0.12), transparent 80%), var(--card-bg);
+            background-color: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 20px;
-            transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
             position: relative;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transform-style: preserve-3d;
-            perspective: 1000px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s;
         }
 
-        .stat-card:hover {
-            border-color: var(--card-border-hover);
-        }
-
-        .stat-card::after {
+        .stat-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--gold);
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
         }
 
-        .stat-card.opportunity::after { background: var(--green); }
-        .stat-card.scarce::after { background: var(--blue); }
-        .stat-card.crash::after { background: var(--red); }
+        .stat-card.opportunity::before {
+            background: linear-gradient(90deg, var(--green) 0%, transparent 100%);
+        }
+
+        .stat-card.scarce::before {
+            background: linear-gradient(90deg, var(--blue) 0%, transparent 100%);
+        }
+
+        .stat-card.crash::before {
+            background: linear-gradient(90deg, var(--red) 0%, transparent 100%);
+        }
 
         .stat-label {
             font-size: 13px;
-            font-weight: 500;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            font-weight: 500;
         }
 
         .stat-value {
             font-family: 'Inter', sans-serif;
-            font-size: 30px;
+            font-size: 26px;
             font-weight: 700;
             color: var(--text-main);
-            margin: 12px 0 6px 0;
+            margin: 10px 0 4px 0;
             display: flex;
             align-items: baseline;
             gap: 6px;
         }
 
-        .stat-value span {
+        .stat-value span:last-child {
             font-size: 14px;
-            color: var(--gold);
-            font-weight: 500;
+            color: var(--text-dark);
+            font-weight: normal;
         }
 
         .stat-desc {
             font-size: 12px;
             color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 4px;
         }
 
-        /* 选项卡 Tab 控制 */
-        .tab-navigation {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        .tab-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-dark);
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 8px 16px;
-            position: relative;
-            transition: all 0.3s;
-        }
-        .tab-btn:hover {
-            color: var(--text-main);
-        }
-        .tab-btn.active {
-            color: var(--gold);
-        }
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: -11px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--gold);
-        }
-
-        /* 图表和折线面板 */
+        /* 图表网格 */
         .dashboard-charts {
             display: grid;
             grid-template-columns: 1fr 2fr;
@@ -320,68 +276,60 @@
         }
 
         .chart-card {
-            background: radial-gradient(circle 120px at var(--x, 50%) var(--y, 50%), rgba(224, 169, 109, 0.12), transparent 80%), var(--card-bg);
+            background-color: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 20px;
             display: flex;
             flex-direction: column;
-            height: auto;
-            min-height: 420px;
-            transition: transform 0.15s ease-out, box-shadow 0.3s ease, border-color 0.3s ease;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-
-        .chart-card:hover {
-            border-color: var(--card-border-hover);
         }
 
         .chart-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 12px;
         }
 
         .chart-title {
             font-size: 16px;
-            font-weight: 600;
-            color: var(--gold);
+            font-weight: 700;
+            color: var(--text-main);
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
+        .chart-title svg {
+            color: var(--gold);
+        }
+
         .chart-select {
-            background: #1e2230;
+            background-color: #1a1c24;
             border: 1px solid var(--card-border);
             color: var(--text-main);
-            padding: 4px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 13px;
             outline: none;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chart-select:focus {
+            border-color: var(--gold);
         }
 
         .chart-container {
             position: relative;
+            flex-grow: 1;
+            min-height: 260px;
             width: 100%;
-            height: 320px; /* 固定高度，防止 Chart.js 响应式计算导致高度无限膨胀 */
-            min-height: 0;
         }
 
-        .chart-container canvas {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* 预测面板 */
+        /* 大跌与活动低谷预测面板 */
         .forecast-panel {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -390,17 +338,20 @@
             padding-top: 16px;
             border-top: 1px dashed rgba(224, 169, 109, 0.15);
         }
+
         .forecast-item {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
+
         .forecast-label {
             font-size: 11px;
             color: var(--text-dark);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         .forecast-value {
             font-family: 'Inter', sans-serif;
             font-size: 14px;
@@ -411,31 +362,66 @@
             flex-wrap: wrap;
             gap: 6px;
         }
+
         .forecast-value .highlight-gold { color: var(--gold); }
         .forecast-value .highlight-orange { color: var(--orange); }
         .forecast-value .highlight-red { color: var(--red); }
 
-        /* 变动比对面板 */
+        /* 选项卡 Tab 控制 */
+        .tab-navigation {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 10px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dark);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 16px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover { color: var(--text-main); }
+        .tab-btn.active { color: var(--gold); }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -11px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold);
+        }
+
+        /* 变动比对面板样式 */
         .diff-panel {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             margin-bottom: 32px;
         }
+
         @media (max-width: 900px) {
-            .diff-panel {
-                grid-template-columns: 1fr;
-            }
+            .diff-panel { grid-template-columns: 1fr; }
         }
+
         .diff-column {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             padding: 20px;
         }
+
         .diff-column.added-col { border-top: 3px solid var(--green); }
         .diff-column.removed-col { border-top: 3px solid var(--red); }
-        
+
         .diff-column-header {
             font-size: 16px;
             font-weight: 700;
@@ -445,7 +431,7 @@
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .diff-list {
             display: flex;
             flex-direction: column;
@@ -484,16 +470,14 @@
             padding: 16px;
             margin-bottom: 24px;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .search-wrapper {
             position: relative;
             flex-grow: 1;
-            max-width: 400px;
+            max-width: 420px;
         }
 
         .search-input {
@@ -517,29 +501,78 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .filter-btn {
             background: #1e2230;
             border: 1px solid var(--card-border);
             color: var(--text-muted);
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            user-select: none;
         }
 
         .filter-btn:hover {
             color: var(--text-main);
             border-color: var(--gold-dark);
+            background: #242838;
         }
 
         .filter-btn.active {
             background: var(--gold);
             color: #0f1013;
-            font-weight: 600;
+            font-weight: 700;
             border-color: var(--gold);
+            box-shadow: 0 2px 10px rgba(224, 169, 109, 0.3);
+        }
+
+        .filter-btn.active .filter-count {
+            background: rgba(0, 0, 0, 0.25);
+            color: #0f1013;
+            font-weight: 700;
+        }
+
+        .filter-count {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            padding: 1px 6px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 4px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .filter-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-row-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--gold-light);
+            min-width: 75px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            letter-spacing: 0.3px;
         }
 
         /* 数据表格面板 */
@@ -698,6 +731,14 @@
         .badge-sell-gradual { background-color: var(--red-bg); color: var(--red); }
         .badge-sell-quick { background-color: rgba(244, 63, 94, 0.15); color: #f43f5e; }
 
+        /* 物品分类徽章样式 */
+        .badge-cat-vehicle { background: rgba(224, 169, 109, 0.15); color: var(--gold); border: 1px solid rgba(224, 169, 109, 0.35); }
+        .badge-cat-camo { background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.35); }
+        .badge-cat-box { background: rgba(251, 146, 60, 0.15); color: #fb923c; border: 1px solid rgba(251, 146, 60, 0.35); }
+        .badge-cat-item { background: rgba(96, 165, 250, 0.15); color: #60a5fa; border: 1px solid rgba(96, 165, 250, 0.35); }
+        .badge-cat-mat { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.35); }
+        .badge-cat-other { background: rgba(156, 163, 175, 0.15); color: #9ca3af; border: 1px solid rgba(156, 163, 175, 0.35); }
+
         /* 评分等级颜色 */
         .color-high { color: var(--green); }
         .color-medium { color: var(--blue); }
@@ -735,11 +776,199 @@
             pointer-events: auto;
         }
 
-        .empty-state {
+        /* 同步按钮与模态弹窗样式 */
+        .sync-btn {
+            background: rgba(224, 169, 109, 0.12);
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(224, 169, 109, 0.1);
+        }
+        .sync-btn:hover {
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%);
+            color: #0f1013;
+            box-shadow: 0 0 15px rgba(224, 169, 109, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 11, 14, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-box {
+            background: #15171e;
+            border: 1px solid rgba(224, 169, 109, 0.3);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 580px;
+            padding: 26px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(224, 169, 109, 0.15);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .modal-header h2 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gold-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .modal-close {
+            background: transparent;
+            border: none;
             color: var(--text-dark);
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .modal-close:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .drop-zone {
+            border: 2px dashed rgba(224, 169, 109, 0.35);
+            border-radius: 12px;
+            padding: 24px 20px;
             text-align: center;
-            padding: 48px;
-            font-size: 14px;
+            background: rgba(224, 169, 109, 0.02);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 16px;
+        }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--gold);
+            background: rgba(224, 169, 109, 0.08);
+            box-shadow: 0 0 15px rgba(224, 169, 109, 0.15);
+        }
+        .drop-zone-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .drop-zone-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        .file-info-badge {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid rgba(74, 222, 128, 0.3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gold-light);
+            margin-bottom: 6px;
+        }
+        .form-input {
+            width: 100%;
+            background: #0f1013;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 9px 12px;
+            color: var(--text-main);
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+        .form-input:focus {
+            border-color: var(--gold);
+        }
+        .token-tip {
+            font-size: 11px;
+            color: var(--text-dark);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%);
+            border: none;
+            color: #0f1013;
+            font-weight: 700;
+            padding: 11px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary:hover:not(:disabled) {
+            box-shadow: 0 0 20px rgba(224, 169, 109, 0.4);
+            transform: translateY(-1px);
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .status-log {
+            display: none;
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #0f1013;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 130px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -750,18 +979,24 @@
     <!-- 顶栏区域 -->
     <header>
         <div class="logo-section">
-            <h1>GAIJIN MARKET VEHICLES ANALYST</h1>
-            <p>基于数据统计的战雷全市场载具大盘评估与投资推荐仪表盘 (v2版)</p>
+            <h1>GAIJIN MARKET ANALYST</h1>
+            <p>基于 5 因子动态量化算法的战雷全市场大盘评估与投资推荐面板 (v4.1 量化版)</p>
         </div>
-        <div class="custom-dropdown" id="snapshotDropdown">
-            <span id="snapshot-indicator" style="display: none; background: var(--red-bg); color: var(--red); border: 1px solid var(--red); font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; animation: pulse 2s infinite;">[时光回溯中]</span>
-            数据大盘版本: 
-            <div class="dropdown-trigger" onclick="toggleDropdown(event)">
-                <span id="dropdown-current-val">加载中...</span>
-                <svg class="arrow-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s; color: var(--gold);"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </div>
-            <div class="dropdown-menu" id="dropdownMenu">
-                <!-- 动态填充的微缩快照卡片列表 -->
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <button class="sync-btn" onclick="openUploadModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 13 12 8 9 11"/><polyline points="12 8 15 11"/></svg>
+                ☁️ 同步最新数据
+            </button>
+            <div class="custom-dropdown" id="snapshotDropdown">
+                <span id="snapshot-indicator" style="display: none; background: var(--red-bg); color: var(--red); border: 1px solid var(--red); font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; animation: pulse 2s infinite;">[时光回溯中]</span>
+                数据大盘版本: 
+                <div class="dropdown-trigger" onclick="toggleDropdown(event)">
+                    <span id="dropdown-current-val">加载中...</span>
+                    <svg class="arrow-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.3s; color: var(--gold);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <!-- 动态填充的微缩快照卡片列表 -->
+                </div>
             </div>
         </div>
     </header>
@@ -769,31 +1004,31 @@
     <!-- 顶部 KPI 卡片 -->
     <div class="stats-grid">
         <div class="stat-card">
-            <span class="stat-label">大盘载具总数</span>
+            <span class="stat-label">大盘收录总数</span>
             <div class="stat-value"><span id="total-vehicles">0</span><span>种</span></div>
             <div class="stat-desc">
-                当前市场收录载具分析样本总数
+                挂牌估值: <b id="total-sell-val" style="color:var(--gold);">0</b> GJN (公允: <b id="total-fair-val" style="color:var(--text-main);">0</b> G)
             </div>
         </div>
         <div class="stat-card opportunity">
             <span class="stat-label">超跌 / 低估机会数</span>
             <div class="stat-value" style="color: var(--green);"><span id="opportunity-count">0</span><span>种</span></div>
             <div class="stat-desc">
-                建议买入或超跌持有（抄底良机）
+                建议强力买入或超跌低位抄底
             </div>
         </div>
         <div class="stat-card scarce">
-            <span class="stat-label">极度稀缺载具数</span>
+            <span class="stat-label">极度稀缺在售</span>
             <div class="stat-value" style="color: var(--blue);"><span id="scarce-count">0</span><span>种</span></div>
             <div class="stat-desc">
-                当前在售挂单极少（数量 &le; 10）
+                当前在售挂单极少（数量 &le; 10 辆）
             </div>
         </div>
         <div class="stat-card crash">
-            <span class="stat-label">近期有暴跌记录载具</span>
+            <span class="stat-label">近期断崖暴跌</span>
             <div class="stat-value" style="color: var(--red);"><span id="crash-count">0</span><span>种</span></div>
             <div class="stat-desc">
-                30 天内曾暴跌超 30% 仍反弹无力
+                30 天内曾暴跌超 30% 仍处于低谷
             </div>
         </div>
     </div>
@@ -865,22 +1100,57 @@
 
     <!-- 数据控制面板 -->
     <div class="controls-card">
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" class="search-input" placeholder="输入载具名称搜索...">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap;">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索载具 / 涂装 / 箱子 / 道具挂饰名称...">
+            </div>
         </div>
-        <div class="filter-buttons">
-            <button class="filter-btn active" data-action="all">全部物品</button>
-            <button class="filter-btn" data-action="badge-hold-strong">强力持有</button>
-            <button class="filter-btn" data-action="badge-hold-neutral">稳定持仓</button>
-            <button class="filter-btn" data-action="badge-hold-dip">低位等待</button>
-            <button class="filter-btn" data-action="badge-sell-gradual">建议卖出</button>
-            <button class="filter-btn" data-action="badge-sell-quick">快速套现</button>
+
+        <!-- 多维度联动筛选区域 -->
+        <div class="filter-section">
+            <!-- 类别筛选 -->
+            <div class="filter-row">
+                <span class="filter-row-label">🏷️ 物品类别:</span>
+                <div class="filter-buttons" id="categoryFilterGroup">
+                    <button class="filter-btn active" data-filter-type="category" data-val="all">全部类别 <span id="count-cat-all" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="category" data-val="载具">🚀 载具 <span id="count-cat-vehicle" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="category" data-val="涂装">🎨 涂装 <span id="count-cat-camo" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="category" data-val="箱子">📦 箱子 <span id="count-cat-box" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="category" data-val="道具/挂饰">🔑 道具/挂饰 <span id="count-cat-item" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="category" data-val="活动材料">⚙️ 活动材料 <span id="count-cat-mat" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="category" data-val="其他">📎 其他 <span id="count-cat-other" class="filter-count">0</span></button>
+                </div>
+            </div>
+
+            <!-- 操作建议筛选 -->
+            <div class="filter-row">
+                <span class="filter-row-label">💡 投资建议:</span>
+                <div class="filter-buttons" id="actionFilterGroup">
+                    <button class="filter-btn active" data-filter-type="action" data-val="all">全部建议 <span id="count-act-all" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="action" data-val="STRONG_HOLD">🌟 强力持有 <span id="count-act-strong" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="action" data-val="HOLD_NEUTRAL">⚖️ 稳健持仓 <span id="count-act-neutral" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="action" data-val="HOLD_DIP">📉 低位等待 <span id="count-act-dip" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="action" data-val="GRADUAL_SELL">💰 建议卖出 <span id="count-act-gradual" class="filter-count">0</span></button>
+                    <button class="filter-btn" data-filter-type="action" data-val="QUICK_SELL">⚡ 快速套现 <span id="count-act-quick" class="filter-count">0</span></button>
+                </div>
+            </div>
+
+            <!-- 市场机会类型筛选 -->
+            <div class="filter-row">
+                <span class="filter-row-label">💎 市场机会:</span>
+                <div class="filter-buttons" id="opportunityFilterGroup">
+                    <button class="filter-btn active" data-filter-type="opp" data-val="all">全部机会</button>
+                    <button class="filter-btn" data-filter-type="opp" data-val="dip">🚀 抄底机会</button>
+                    <button class="filter-btn" data-filter-type="opp" data-val="scarce">💎 极度稀缺 (&le;10)</button>
+                    <button class="filter-btn" data-filter-type="opp" data-val="crash">📉 近期断崖暴跌</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- 导航选项卡 Tabs -->
     <div class="tab-navigation">
-        <button class="tab-btn active" id="tabInventory" onclick="switchTab('inventory')">全市场载具大盘 (<span id="tab-inventory-count">0</span>)<span id="snapshot-indicator-tab" style="font-size: 11px; color: var(--red); font-weight: bold; margin-left: 6px; display: none;">[查看历史快照中]</span></button>
+        <button class="tab-btn active" id="tabInventory" onclick="switchTab('inventory')">全市场大盘一览 (<span id="tab-inventory-count">0</span>)<span id="snapshot-indicator-tab" style="font-size: 11px; color: var(--red); font-weight: bold; margin-left: 6px; display: none;">[查看历史快照中]</span></button>
         <button class="tab-btn" id="tabDiff" onclick="switchTab('diff')">大盘最近新增与下架比对 (上架 <span id="tab-diff-added">0</span> / 下架 <span id="tab-diff-removed">0</span>)</button>
         <button class="tab-btn" id="tabHistorySnap" onclick="switchTab('historySnap')">历史快照大盘账本 (<span id="tab-history-count">0</span>)</button>
     </div>
@@ -920,15 +1190,16 @@
             <table id="inventoryTable">
                 <thead>
                     <tr>
-                        <th onclick="sortTable(0)" style="width: 20%">载具/物品</th>
-                        <th onclick="sortTable(1)" style="width: 12%">收录与首次上架</th>
-                        <th onclick="sortTable(2)" style="width: 12%">最低市价 (在售)</th>
-                        <th onclick="sortTable(3)" style="width: 12%">最高求购 (求购)</th>
-                        <th onclick="sortTable(4)" style="width: 7%">价差比率</th>
-                        <th onclick="sortTable(5)" style="width: 9%">增值潜力</th>
-                        <th onclick="sortTable(6)" style="width: 10%">大盘建议</th>
-                        <th onclick="sortTable(7)" style="width: 9%">建议买入日期</th>
-                        <th onclick="sortTable(8)" style="width: 9%">建议卖出日期</th>
+                        <th onclick="sortTable(0)" style="width: 18%">载具/物品</th>
+                        <th onclick="sortTable(9)" style="width: 7%">类别</th>
+                        <th onclick="sortTable(1)" style="width: 10%">收录与首次上架</th>
+                        <th onclick="sortTable(2)" style="width: 11%">最低市价 (在售)</th>
+                        <th onclick="sortTable(3)" style="width: 11%">最高求购 (求购)</th>
+                        <th onclick="sortTable(4)" style="width: 6%">价差比率</th>
+                        <th onclick="sortTable(5)" style="width: 8%">增值潜力</th>
+                        <th onclick="sortTable(6)" style="width: 9%">大盘建议</th>
+                        <th onclick="sortTable(7)" style="width: 10%">建议买入日期</th>
+                        <th onclick="sortTable(8)" style="width: 10%">建议卖出日期</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -1097,36 +1368,11 @@
                         
                         if (dist < 115) {
                             let linkAlpha = (115 - dist) / 115 * 0.12;
-                            
-                            if (mouse.x !== null && mouse.y !== null) {
-                                const mDist1 = Math.hypot(mouse.x - particles[i].x, mouse.y - particles[i].y);
-                                const mDist2 = Math.hypot(mouse.x - particles[j].x, mouse.y - particles[j].y);
-                                if (mDist1 < mouse.radius && mDist2 < mouse.radius) {
-                                    linkAlpha += 0.12;
-                                }
-                            }
-                            
                             ctx.beginPath();
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
                             ctx.strokeStyle = `rgba(224, 169, 109, ${linkAlpha})`;
-                            ctx.lineWidth = 0.7;
-                            ctx.stroke();
-                        }
-                    }
-                }
-                
-                if (mouse.x !== null && mouse.y !== null) {
-                    for (let i = 0; i < particles.length; i++) {
-                        const dx = mouse.x - particles[i].x;
-                        const dy = mouse.y - particles[i].y;
-                        const dist = Math.hypot(dx, dy);
-                        if (dist < 100) {
-                            ctx.beginPath();
-                            ctx.moveTo(mouse.x, mouse.y);
-                            ctx.lineTo(particles[i].x, particles[i].y);
-                            ctx.strokeStyle = `rgba(224, 169, 109, ${(100 - dist) / 100 * 0.08})`;
-                            ctx.lineWidth = 0.5;
+                            ctx.lineWidth = 0.6;
                             ctx.stroke();
                         }
                     }
@@ -1134,6 +1380,7 @@
                 
                 requestAnimationFrame(animate);
             }
+            
             animate();
         }
 
@@ -1150,7 +1397,7 @@
                     
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    const rotateX = -(y - centerY) / centerY * 6.5; 
+                    const rotateX = -(y - centerY) / centerY * 6.5;
                     const rotateY = (x - centerX) / centerX * 6.5;
                     
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.025, 1.025, 1.025)`;
@@ -1173,14 +1420,37 @@
             return 'poor';
         }
 
+        // 根据类别获取 Badge
+        function getCategoryBadge(category) {
+            switch (category) {
+                case '载具': return '<span class="badge badge-cat-vehicle">🚀 载具</span>';
+                case '涂装': return '<span class="badge badge-cat-camo">🎨 涂装</span>';
+                case '箱子': return '<span class="badge badge-cat-box">📦 箱子</span>';
+                case '道具/挂饰': return '<span class="badge badge-cat-item">🔑 道具</span>';
+                case '活动材料': return '<span class="badge badge-cat-mat">⚙️ 材料</span>';
+                default: return `<span class="badge badge-cat-other">${category || '其他'}</span>`;
+            }
+        }
+
         function getActionBadge(action) {
-            switch(action) {
+            switch (action) {
                 case 'STRONG_HOLD': return '<span class="badge badge-hold-strong">强力持有</span>';
-                case 'HOLD_NEUTRAL': return '<span class="badge badge-hold-neutral">稳定持仓</span>';
+                case 'HOLD_NEUTRAL': return '<span class="badge badge-hold-neutral">稳健持仓</span>';
                 case 'HOLD_DIP': return '<span class="badge badge-hold-dip">低位等待</span>';
                 case 'GRADUAL_SELL': return '<span class="badge badge-sell-gradual">建议卖出</span>';
                 case 'QUICK_SELL': return '<span class="badge badge-sell-quick">快速套现</span>';
                 default: return '<span class="badge">' + action + '</span>';
+            }
+        }
+
+        function getActionText(action) {
+            switch (action) {
+                case 'STRONG_HOLD': return '强力持有';
+                case 'HOLD_NEUTRAL': return '稳健持仓 稳定持有';
+                case 'HOLD_DIP': return '低谷等待 低位等待 抄底';
+                case 'GRADUAL_SELL': return '建议卖出 建议分批';
+                case 'QUICK_SELL': return '快速套现 即刻变现';
+                default: return action || '';
             }
         }
 
@@ -1191,12 +1461,8 @@
             toast.classList.add('show');
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 5000);
+            }, 6000);
         }
-
-        // ==========================================
-        // 核心时光回溯与 Tabs 切换逻辑
-        // ==========================================
 
         function switchTab(tabName) {
             const tabInv = document.getElementById('tabInventory');
@@ -1216,7 +1482,6 @@
                 diffPanel.style.display = 'none';
                 historyPanel.style.display = 'none';
                 
-                // 时光回溯恢复至最新数据
                 if (activeSnapshotDate !== null) {
                     activeSnapshotDate = null;
                     activeInventorySource = inventoryData;
@@ -1224,7 +1489,8 @@
                     document.getElementById('snapshot-indicator-tab').style.display = 'none';
                     
                     calculateKPIs();
-                    renderTable(inventoryData);
+                    initFilterCounts(inventoryData);
+                    filterData();
                     renderPieChart();
                     initHistorySnapPanel(); 
                     initSnapshotDropdown(); 
@@ -1262,14 +1528,15 @@
             if (indicatorTab) indicatorTab.style.display = 'inline';
             
             calculateKPIs(activeInventorySource);
-            renderTable(activeInventorySource);
+            initFilterCounts(activeInventorySource);
+            filterData();
             renderPieChart(activeInventorySource);
             
             initHistorySnapPanel();
             initSnapshotDropdown();
             switchTab('inventory');
             
-            showToast(`🕰️ <b>已进入时光回溯！正在查看 ${dateStr} 的大盘快照！</b><br>顶部卡片与下方数据已切换为历史状态。点击【全市场载具大盘】可切回最新。`);
+            showToast(`🕰️ <b>已进入时光回溯！正在查看 ${dateStr} 的大盘快照！</b><br>顶部卡片与下方数据已切换为历史状态。点击【全市场大盘一览】可切回最新。`);
         }
 
         function initSnapshotDropdown() {
@@ -1295,7 +1562,7 @@
                     </div>
                     <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top: 4px;">
                         <span style="font-size: 15px; font-weight: bold; color: var(--text-main);">${snapshot.totalSellValue.toFixed(2)} <span style="font-size:10px; color:var(--text-dark);">GJN</span></span>
-                        <span style="font-size: 10px; color: var(--text-muted);">载具: <b style="color:var(--blue);">${snapshot.totalVehicles} 种</b> | 机会: <b style="color:var(--green);">${snapshot.opportunityCount}</b></span>
+                        <span style="font-size: 10px; color: var(--text-muted);">收录: <b style="color:var(--blue);">${snapshot.totalVehicles} 种</b> | 机会: <b style="color:var(--green);">${snapshot.opportunityCount}</b></span>
                     </div>
                 `;
                 
@@ -1361,7 +1628,8 @@
                     document.getElementById('snapshot-indicator-tab').style.display = 'none';
                     
                     calculateKPIs();
-                    renderTable(inventoryData);
+                    initFilterCounts(inventoryData);
+                    filterData();
                     renderPieChart();
                     initHistorySnapPanel();
                     initSnapshotDropdown();
@@ -1379,7 +1647,8 @@
                 if (indicatorTab) indicatorTab.style.display = 'inline';
                 
                 calculateKPIs(activeInventorySource);
-                renderTable(activeInventorySource);
+                initFilterCounts(activeInventorySource);
+                filterData();
                 renderPieChart(activeInventorySource);
                 initHistorySnapPanel();
                 initSnapshotDropdown();
@@ -1417,18 +1686,18 @@
                 card.innerHTML = `
                     <span class="stat-label" style="font-size: 14px; font-weight: 700; color: var(--gold); display: flex; justify-content: space-between; align-items: center;">
                         快照日期: ${snapshot.date}
-                        ${isLatestToday ? '<span class="badge badge-hold-strong" style="font-size: 8px; padding: 2px 6px; text-transform:none;">最新当前</span>' : ''}
+                        ${isLatestToday ? '<span class="badge badge-hold-strong" style="font-size: 8px; padding: 2px 6px; text-transform:none;">最新大盘</span>' : ''}
                     </span>
                     <div class="stat-value" style="font-size: 26px; font-weight: 700; margin: 12px 0 6px 0;">
                         ${snapshot.totalSellValue.toFixed(2)} <span style="font-size:12px; color:var(--text-dark);">GJN</span>
                     </div>
                     <div style="font-size: 13px; color: var(--text-muted); display:flex; flex-direction:column; gap:4px; margin-bottom: 12px;">
-                        <span>大盘载具数: <b style="color:var(--blue);">${snapshot.totalVehicles} 种</b></span>
-                        <span>低估机会: <b style="color:var(--green);">${snapshot.opportunityCount} 种</b> | 极稀缺: <b style="color:var(--blue);">${snapshot.scarceCount} 种</b></span>
+                        <span>公允总值: <b style="color:var(--gold-light);">${snapshot.totalFairValue ? snapshot.totalFairValue.toFixed(2) : snapshot.totalSellValue.toFixed(2)} GJN</b></span>
+                        <span>收录总数: <b style="color:var(--blue);">${snapshot.totalVehicles} 种</b> | 机会: <b style="color:var(--green);">${snapshot.opportunityCount} 种</b></span>
                     </div>
-                    <button class="export-btn" style="background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-light) 100%); border:none; color:#0f1013; font-weight:700; border-radius:8px; width:100%; justify-content:center; padding: 8px; font-size:12px; cursor:pointer; ${isCurrentViewing ? 'background: var(--green-bg); color: var(--green); border: 1px solid var(--green);' : ''}"
+                    <button class="filter-btn active" style="width:100%; justify-content:center; padding: 8px; font-size:12px; ${isCurrentViewing ? 'background: var(--green-bg); color: var(--green); border: 1px solid var(--green);' : ''}"
                             onclick="event.stopPropagation(); viewHistorySnapshot('${snapshot.date}')">
-                        🔍 ${isCurrentViewing ? '正在回溯此快照' : '回溯此历史快照'}
+                        🔍 ${isCurrentViewing ? '正在查看此大盘快照' : '查看此历史大盘'}
                     </button>
                 `;
                 panel.appendChild(card);
@@ -1436,10 +1705,6 @@
             
             initCardEffects();
         }
-
-        // ==========================================
-        // 折线图与资产走势图渲染逻辑
-        // ==========================================
 
         function renderPortfolioTrendChart() {
             const container = document.getElementById('trendChartContainer');
@@ -1459,28 +1724,26 @@
             });
             const sellValues = historyTrendData.map(pt => pt.totalSellValue);
             
-            const gradSell = ctx.createLinearGradient(0, 0, 0, 300);
-            gradSell.addColorStop(0, 'rgba(224, 169, 109, 0.25)');
-            gradSell.addColorStop(1, 'rgba(224, 169, 109, 0.00)');
+            const grad = ctx.createLinearGradient(0, 0, 0, 300);
+            grad.addColorStop(0, 'rgba(224, 169, 109, 0.28)');
+            grad.addColorStop(1, 'rgba(224, 169, 109, 0.00)');
             
             trendChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
-                    datasets: [
-                        {
-                            label: '大盘挂载总值 (GJN)',
-                            data: sellValues,
-                            borderColor: '#e0a96d',
-                            backgroundColor: gradSell,
-                            borderWidth: 2.5,
-                            tension: 0.15,
-                            fill: true,
-                            pointRadius: 4,
-                            pointHoverRadius: 6,
-                            pointBackgroundColor: '#e0a96d'
-                        }
-                    ]
+                    datasets: [{
+                        label: '全大盘最低估值总额 (GJN)',
+                        data: sellValues,
+                        borderColor: '#e0a96d',
+                        backgroundColor: grad,
+                        borderWidth: 2.5,
+                        tension: 0.25,
+                        fill: true,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#e0a96d'
+                    }]
                 },
                 options: {
                     responsive: true,
@@ -1512,10 +1775,6 @@
                 }
             });
         }
-
-        // ==========================================
-        // 变动对比面板加载
-        // ==========================================
 
         function initDiffPanel() {
             document.getElementById('tab-inventory-count').innerText = inventoryData.length;
@@ -1602,6 +1861,7 @@
             initCardEffects();
 
             calculateKPIs();
+            initFilterCounts(inventoryData);
             renderTable(inventoryData);
             populateSelector();
             renderPieChart();
@@ -1625,12 +1885,20 @@
 
             document.getElementById('searchInput').addEventListener('input', filterData);
 
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    filterData();
-                });
+            // 监听多维筛选组按钮点击
+            ['categoryFilterGroup', 'actionFilterGroup', 'opportunityFilterGroup'].forEach(groupId => {
+                const groupEl = document.getElementById(groupId);
+                if (groupEl) {
+                    groupEl.querySelectorAll('.filter-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const targetBtn = e.target.closest('.filter-btn');
+                            if (!targetBtn) return;
+                            groupEl.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                            targetBtn.classList.add('active');
+                            filterData();
+                        });
+                    });
+                }
             });
 
             document.getElementById('vehicleSelect').addEventListener('change', (e) => {
@@ -1666,11 +1934,18 @@
 
         function calculateKPIs(sourceData = activeInventorySource) {
             let totalVehicles = sourceData.length;
+            let totalSellVal = 0;
+            let totalFairVal = 0;
             let opportunityCount = 0;
             let scarceCount = 0;
             let crashCount = 0;
 
             sourceData.forEach(item => {
+                const p = item.sellPrice || 0;
+                const fair = item.fairPrice || p;
+                totalSellVal += p;
+                totalFairVal += fair;
+
                 if (item.action === 'STRONG_HOLD' || item.action === 'HOLD_DIP') {
                     opportunityCount++;
                 }
@@ -1686,6 +1961,124 @@
             animateValue('opportunity-count', 0, opportunityCount, 1300, 0);
             animateValue('scarce-count', 0, scarceCount, 1300, 0);
             animateValue('crash-count', 0, crashCount, 1300, 0);
+            
+            const elSell = document.getElementById('total-sell-val');
+            if (elSell) elSell.innerText = totalSellVal.toFixed(1);
+            const elFair = document.getElementById('total-fair-val');
+            if (elFair) elFair.innerText = totalFairVal.toFixed(1);
+        }
+
+        function initFilterCounts(sourceData = activeInventorySource) {
+            const catCounts = {
+                all: sourceData.length,
+                '载具': 0,
+                '涂装': 0,
+                '箱子': 0,
+                '道具/挂饰': 0,
+                '活动材料': 0,
+                '其他': 0
+            };
+            const actCounts = {
+                all: sourceData.length,
+                STRONG_HOLD: 0,
+                HOLD_NEUTRAL: 0,
+                HOLD_DIP: 0,
+                GRADUAL_SELL: 0,
+                QUICK_SELL: 0
+            };
+
+            sourceData.forEach(item => {
+                const cat = item.category || '其他';
+                if (catCounts[cat] !== undefined) {
+                    catCounts[cat]++;
+                } else {
+                    catCounts['其他']++;
+                }
+
+                const act = item.action || 'HOLD_NEUTRAL';
+                if (actCounts[act] !== undefined) {
+                    actCounts[act]++;
+                }
+            });
+
+            const elCatAll = document.getElementById('count-cat-all');
+            if (elCatAll) elCatAll.innerText = catCounts.all;
+            const elCatVeh = document.getElementById('count-cat-vehicle');
+            if (elCatVeh) elCatVeh.innerText = catCounts['载具'];
+            const elCatCamo = document.getElementById('count-cat-camo');
+            if (elCatCamo) elCatCamo.innerText = catCounts['涂装'];
+            const elCatBox = document.getElementById('count-cat-box');
+            if (elCatBox) elCatBox.innerText = catCounts['箱子'];
+            const elCatItem = document.getElementById('count-cat-item');
+            if (elCatItem) elCatItem.innerText = catCounts['道具/挂饰'];
+            const elCatMat = document.getElementById('count-cat-mat');
+            if (elCatMat) elCatMat.innerText = catCounts['活动材料'];
+            const elCatOth = document.getElementById('count-cat-other');
+            if (elCatOth) elCatOth.innerText = catCounts['其他'];
+
+            const elActAll = document.getElementById('count-act-all');
+            if (elActAll) elActAll.innerText = actCounts.all;
+            const elActStr = document.getElementById('count-act-strong');
+            if (elActStr) elActStr.innerText = actCounts.STRONG_HOLD;
+            const elActNeu = document.getElementById('count-act-neutral');
+            if (elActNeu) elActNeu.innerText = actCounts.HOLD_NEUTRAL;
+            const elActDip = document.getElementById('count-act-dip');
+            if (elActDip) elActDip.innerText = actCounts.HOLD_DIP;
+            const elActGra = document.getElementById('count-act-gradual');
+            if (elActGra) elActGra.innerText = actCounts.GRADUAL_SELL;
+            const elActQui = document.getElementById('count-act-quick');
+            if (elActQui) elActQui.innerText = actCounts.QUICK_SELL;
+        }
+
+        function filterData() {
+            const q = document.getElementById('searchInput').value.trim().toLowerCase();
+
+            const catActiveBtn = document.querySelector('#categoryFilterGroup .filter-btn.active');
+            const catFilter = catActiveBtn ? catActiveBtn.getAttribute('data-val') : 'all';
+
+            const actActiveBtn = document.querySelector('#actionFilterGroup .filter-btn.active');
+            const actFilter = actActiveBtn ? actActiveBtn.getAttribute('data-val') : 'all';
+
+            const oppActiveBtn = document.querySelector('#opportunityFilterGroup .filter-btn.active');
+            const oppFilter = oppActiveBtn ? oppActiveBtn.getAttribute('data-val') : 'all';
+
+            const filtered = activeInventorySource.filter(item => {
+                let matchSearch = true;
+                if (q) {
+                    const name = (item.name || '').toLowerCase();
+                    const category = (item.category || '').toLowerCase();
+                    const actionName = (getActionText(item.action) || '').toLowerCase();
+                    matchSearch = name.includes(q) || category.includes(q) || actionName.includes(q);
+                }
+
+                let matchCat = true;
+                if (catFilter !== 'all') {
+                    matchCat = (item.category === catFilter);
+                }
+
+                let matchAct = true;
+                if (actFilter !== 'all') {
+                    matchAct = (item.action === actFilter);
+                }
+
+                let matchOpp = true;
+                if (oppFilter === 'dip') {
+                    matchOpp = (item.action === 'STRONG_HOLD' || item.action === 'HOLD_DIP');
+                } else if (oppFilter === 'scarce') {
+                    matchOpp = (item.sellOrders !== undefined && item.sellOrders !== null && item.sellOrders <= 10);
+                } else if (oppFilter === 'crash') {
+                    matchOpp = (item.lastCrashDrop !== undefined && item.lastCrashDrop >= 30);
+                }
+
+                return matchSearch && matchCat && matchAct && matchOpp;
+            });
+
+            const tabCountEl = document.getElementById('tab-inventory-count');
+            if (tabCountEl) {
+                tabCountEl.innerText = filtered.length;
+            }
+
+            renderTable(filtered);
         }
 
         function renderTable(data) {
@@ -1724,6 +2117,13 @@
                 const score = item.growthScore !== undefined ? Math.round(item.growthScore) : 0;
                 const scoreClass = getScoreClass(score);
 
+                const ceilingBadge = item.isNearCeiling ? '<span class="badge badge-sell-gradual" style="font-size: 8px; padding: 1px 4px; margin-left: 4px; text-transform: none;" title="单价接近 2000 GJN 交易所硬顶">顶峰预警</span>' : '';
+
+                let fairText = '';
+                if (item.fairPrice && item.sellPrice && item.fairPrice < item.sellPrice * 0.96) {
+                    fairText = `<div style="font-size: 9px; color: var(--gold-dark); text-align: right;" title="保守公允估值">公允: ${item.fairPrice.toFixed(1)} G</div>`;
+                }
+
                 let firstListedText = '<span style="color: var(--text-dark);">暂无数据</span>';
                 if (item.firstListedDays !== undefined && item.firstListedDays >= 0) {
                     firstListedText = `
@@ -1732,7 +2132,6 @@
                     `;
                 }
 
-                // 跨快照波动与计算趋势指示器
                 let priceModText = '';
                 if (item.snapshotGrowthPct !== undefined && item.snapshotPriceHistoryCount >= 2) {
                     const isGrowthPos = item.snapshotGrowthPct > 0;
@@ -1753,6 +2152,7 @@
                             <div class="item-details">
                                 <span class="item-name">
                                     ${item.name}
+                                    ${ceilingBadge}
                                     <a class="market-link" href="${item.url}" target="_blank" onclick="event.stopPropagation();" title="去Gaijin市场查看">
                                         <svg width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/><path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/></svg>
                                     </a>
@@ -1760,6 +2160,7 @@
                             </div>
                         </div>
                     </td>
+                    <td>${getCategoryBadge(item.category)}</td>
                     <td>${firstListedText}</td>
                     <td class="price-col">
                         <span class="price-gjn">${sellText}</span>
@@ -1767,6 +2168,7 @@
                             <span>在售: ${item.sellOrders !== undefined ? item.sellOrders : '-'}</span>
                             <span>税后: ${item.sellPrice !== null ? (item.sellPrice * 0.85).toFixed(2) : '-'}</span>
                         </div>
+                        ${fairText}
                         ${priceModText}
                     </td>
                     <td class="price-col">
@@ -1817,31 +2219,7 @@
             });
         }
 
-        function filterData() {
-            const q = document.getElementById('searchInput').value.toLowerCase();
-            const actionFilter = document.querySelector('.filter-btn.active').getAttribute('data-action');
-
-            const filtered = activeInventorySource.filter(item => {
-                const matchName = item.name.toLowerCase().includes(q);
-                
-                if (actionFilter === 'all') return matchName;
-                
-                let itemClass = '';
-                if (item.action === 'STRONG_HOLD') itemClass = 'badge-hold-strong';
-                else if (item.action === 'HOLD_NEUTRAL') itemClass = 'badge-hold-neutral';
-                else if (item.action === 'HOLD_DIP') itemClass = 'badge-hold-dip';
-                else if (item.action === 'GRADUAL_SELL') itemClass = 'badge-sell-gradual';
-                else if (item.action === 'QUICK_SELL') itemClass = 'badge-sell-quick';
-
-                return matchName && itemClass === actionFilter;
-            });
-
-            renderTable(filtered);
-            calculateKPIs(filtered);
-            renderPieChart(filtered);
-        }
-
-        function renderPieChart(data = activeInventorySource) {
+        function renderPieChart(sourceData = activeInventorySource) {
             const container = document.getElementById('pieChartContainer');
             if (pieChartInstance) {
                 pieChartInstance.destroy();
@@ -1850,57 +2228,39 @@
             container.innerHTML = '<canvas id="pieChart"></canvas>';
             const ctx = document.getElementById('pieChart').getContext('2d');
             
-            let counts = {
+            const actions = {
                 'STRONG_HOLD': 0,
                 'HOLD_NEUTRAL': 0,
                 'HOLD_DIP': 0,
                 'GRADUAL_SELL': 0,
                 'QUICK_SELL': 0
             };
-
-            data.forEach(item => {
-                if (counts[item.action] !== undefined) {
-                    counts[item.action]++;
+            
+            sourceData.forEach(item => {
+                if (actions[item.action] !== undefined) {
+                    actions[item.action]++;
                 }
             });
-
-            const labels = ['强力持有', '稳定持仓', '低位等待', '建议卖出', '快速套现'];
-            const chartData = [
-                counts['STRONG_HOLD'],
-                counts['HOLD_NEUTRAL'],
-                counts['HOLD_DIP'],
-                counts['GRADUAL_SELL'],
-                counts['QUICK_SELL']
-            ];
             
-            const backgroundColors = [
-                '#4ade80', 
-                '#60a5fa', 
-                '#fb923c', 
-                '#f87171', 
-                '#f43f5e'
-            ];
-
-            const total = chartData.reduce((a, b) => a + b, 0);
-            if (total === 0) {
-                if (pieChartInstance) pieChartInstance.destroy();
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-                ctx.font = '14px Inter';
-                ctx.fillStyle = '#6b7280';
-                ctx.textAlign = 'center';
-                ctx.fillText('暂无有效行动建议大盘数据', ctx.canvas.width / 2, ctx.canvas.height / 2);
-                return;
-            }
-
-            if (pieChartInstance) pieChartInstance.destroy();
-
             pieChartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels,
+                    labels: ['强力持有', '稳健持仓', '低位等待', '建议卖出', '快速套现'],
                     datasets: [{
-                        data: chartData,
-                        backgroundColor: backgroundColors,
+                        data: [
+                            actions['STRONG_HOLD'],
+                            actions['HOLD_NEUTRAL'],
+                            actions['HOLD_DIP'],
+                            actions['GRADUAL_SELL'],
+                            actions['QUICK_SELL']
+                        ],
+                        backgroundColor: [
+                            '#4ade80',
+                            '#60a5fa',
+                            '#fb923c',
+                            '#f87171',
+                            '#f43f5e'
+                        ],
                         borderWidth: 1,
                         borderColor: '#15171e'
                     }]
@@ -1911,20 +2271,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: {
-                                color: '#f3f4f6',
-                                font: { size: 11 },
-                                boxWidth: 12
-                            }
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    const val = context.raw;
-                                    const pct = ((val / total) * 100).toFixed(1) + '%';
-                                    return ` 数量: ${val} 种 (${pct})`;
-                                }
-                            }
+                            labels: { color: '#f3f4f6', font: { size: 11 }, boxWidth: 12 }
                         }
                     },
                     cutout: '65%'
@@ -1940,7 +2287,7 @@
             }
             container.innerHTML = '<canvas id="trendChart"></canvas>';
             const ctx = document.getElementById('trendChart').getContext('2d');
-
+            
             const forecastPanel = document.getElementById('forecastPanel');
             if (forecastPanel) {
                 if (!item.history || item.history.length === 0) {
@@ -1990,7 +2337,7 @@
                         plugins: {
                             title: {
                                 display: true,
-                                text: `"${item.name}" 暂无大盘趋势数据`,
+                                text: `"${item.name}" 暂无历史交易趋势数据`,
                                 color: '#9ca3af',
                                 font: { size: 14, weight: 'normal' }
                             }
@@ -2046,10 +2393,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
+                    interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: { display: false },
                         tooltip: {
@@ -2065,109 +2409,453 @@
                                     return date.toLocaleString();
                                 },
                                 label: function(context) {
-                                    return ` 均价: ${context.raw.toFixed(2)} GJN`;
+                                    const index = context.dataIndex;
+                                    const pt = activeHistory[index];
+                                    const volText = (pt && pt.length >= 3 && pt[2] > 0) ? ` | 成交: ${pt[2]} 辆` : '';
+                                    return ` 均价: ${context.raw.toFixed(2)} GJN${volText}`;
                                 }
                             }
                         }
                     },
                     scales: {
-                        x: {
-                            grid: { color: 'rgba(255, 255, 255, 0.02)' },
-                            ticks: {
-                                color: '#9ca3af',
-                                maxTicksLimit: 12
-                            }
-                        },
-                        y: {
-                            grid: { color: 'rgba(255, 255, 255, 0.03)' },
-                            ticks: {
-                                color: '#9ca3af',
-                                callback: function(value) { return value.toFixed(1) + ' G'; }
-                            }
-                        }
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.02)' }, ticks: { color: '#9ca3af', maxTicksLimit: 12 } },
+                        y: { grid: { color: 'rgba(255, 255, 255, 0.03)' }, ticks: { color: '#9ca3af', callback: function(value) { return value.toFixed(1) + ' G'; } } }
                     }
                 }
             });
         }
 
-        // ==========================================
-        // 列排序算法
-        // ==========================================
-
-        function sortTable(columnIndex) {
+        function sortTable(colIndex) {
             const table = document.getElementById("inventoryTable");
-            const headers = table.querySelectorAll("thead th");
             
-            if (currentSortColumn === columnIndex) {
+            const headerIndexMap = {
+                0: 0,
+                9: 1,
+                1: 2,
+                2: 3,
+                3: 4,
+                4: 5,
+                5: 6,
+                6: 7,
+                7: 8,
+                8: 9
+            };
+            const headerIdx = headerIndexMap[colIndex];
+            const header = table.querySelectorAll("thead th")[headerIdx];
+
+            if (currentSortColumn === colIndex) {
                 isSortAsc = !isSortAsc;
             } else {
-                currentSortColumn = columnIndex;
+                currentSortColumn = colIndex;
                 isSortAsc = true;
             }
-            
-            headers.forEach((th, idx) => {
+
+            table.querySelectorAll("thead th").forEach(th => {
                 th.classList.remove("sort-asc", "sort-desc");
-                if (idx === columnIndex) {
-                    th.classList.add(isSortAsc ? "sort-asc" : "sort-desc");
-                }
             });
-            
-            const sorted = [...activeInventorySource].sort((a, b) => {
+            if (header) {
+                header.classList.add(isSortAsc ? "sort-asc" : "sort-desc");
+            }
+
+            activeInventorySource.sort((a, b) => {
                 let valA, valB;
-                
-                switch(columnIndex) {
-                    case 0: // 名字
+                switch (colIndex) {
+                    case 0:
                         valA = a.name;
                         valB = b.name;
                         return isSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
-                    case 1: // 首次上架天数
-                        valA = a.firstListedDays !== undefined ? a.firstListedDays : (isSortAsc ? 999999 : -999999);
-                        valB = b.firstListedDays !== undefined ? b.firstListedDays : (isSortAsc ? 999999 : -999999);
+                    case 9:
+                        valA = a.category || '其他';
+                        valB = b.category || '其他';
+                        return isSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    case 1:
+                        valA = (a.firstListedDays !== undefined && a.firstListedDays >= 0) ? a.firstListedDays : (isSortAsc ? 999999 : -2.0);
+                        valB = (b.firstListedDays !== undefined && b.firstListedDays >= 0) ? b.firstListedDays : (isSortAsc ? 999999 : -2.0);
                         break;
-                    case 2: // 最低市价
-                        valA = a.sellPrice !== null ? a.sellPrice : (isSortAsc ? 999999 : -999999);
-                        valB = b.sellPrice !== null ? b.sellPrice : (isSortAsc ? 999999 : -999999);
+                    case 2:
+                        valA = a.sellPrice !== null ? a.sellPrice : -1;
+                        valB = b.sellPrice !== null ? b.sellPrice : -1;
                         break;
-                    case 3: // 最高求购
-                        valA = a.buyPrice !== null ? a.buyPrice : (isSortAsc ? -999999 : 999999);
-                        valB = b.buyPrice !== null ? b.buyPrice : (isSortAsc ? -999999 : 999999);
+                    case 3:
+                        valA = (a.buyPrice !== null && a.buyPrice !== undefined && a.buyPrice > 0) ? a.buyPrice : -1;
+                        valB = (b.buyPrice !== null && b.buyPrice !== undefined && b.buyPrice > 0) ? b.buyPrice : -1;
                         break;
-                    case 4: // 价差
-                        valA = a.spread !== null ? a.spread : (isSortAsc ? 999999 : -999999);
-                        valB = b.spread !== null ? b.spread : (isSortAsc ? 999999 : -999999);
+                    case 4:
+                        valA = (a.buyPrice !== null && a.buyPrice !== undefined && a.buyPrice > 0 && a.spread !== null && a.spread !== undefined) ? a.spread : 999;
+                        valB = (b.buyPrice !== null && b.buyPrice !== undefined && b.buyPrice > 0 && b.spread !== null && b.spread !== undefined) ? b.spread : 999;
                         break;
-                    case 5: // 潜力分
-                        valA = a.growthScore !== undefined ? a.growthScore : 0;
-                        valB = b.growthScore !== undefined ? b.growthScore : 0;
+                    case 5:
+                        valA = a.growthScore !== undefined ? a.growthScore : -1;
+                        valB = b.growthScore !== undefined ? b.growthScore : -1;
                         break;
-                    case 6: // 行动建议级别
-                        const order = { 'STRONG_HOLD': 4, 'HOLD_DIP': 3, 'HOLD_NEUTRAL': 2, 'GRADUAL_SELL': 1, 'QUICK_SELL': 0 };
-                        valA = order[a.action] !== undefined ? order[a.action] : -1;
-                        valB = order[b.action] !== undefined ? order[b.action] : -1;
-                        break;
-                    case 7: // 建议买入日期
+                    case 6:
+                        valA = a.action || '';
+                        valB = b.action || '';
+                        return isSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                    case 7:
                         valA = a.suggestedBuyDate || "";
                         valB = b.suggestedBuyDate || "";
                         break;
-                    case 8: // 建议卖出日期
+                    case 8:
                         valA = a.suggestedSellDate || "";
                         valB = b.suggestedSellDate || "";
                         break;
-                    default:
-                        return 0;
                 }
-                
+
                 if (valA < valB) return isSortAsc ? -1 : 1;
                 if (valA > valB) return isSortAsc ? 1 : -1;
                 return 0;
             });
+
+            filterData();
+        }
+
+        // ==========================================
+        // GitHub 数据同步与上传模块 (Web 直连 API)
+        // ==========================================
+        let selectedFileContent = null;
+        let selectedFileName = '';
+
+        function openUploadModal() {
+            const modal = document.getElementById('uploadSyncModal');
+            if (!modal) return;
             
-            renderTable(sorted);
-            // 联动高亮选中状态
-            if (currentVehicle) {
-                highlightTableRow(currentVehicle.name, false);
+            // 读取已保存的 Token 和 Repo
+            const savedToken = localStorage.getItem('wt_github_token') || '';
+            const savedRepo = localStorage.getItem('wt_github_repo_market') || 'kangkang4468/wt-market-analyst';
+            
+            const tokenInput = document.getElementById('tokenInput');
+            const repoInput = document.getElementById('repoInput');
+            if (tokenInput) tokenInput.value = savedToken;
+            if (repoInput) repoInput.value = savedRepo;
+
+            // 预设今天日期的文件名
+            if (!selectedFileName) {
+                const todayStr = new Date().toISOString().split('T')[0];
+                const targetInput = document.getElementById('targetFileNameInput');
+                if (targetInput) targetInput.value = `daily_json/gaijin_market_${todayStr}.json`;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeUploadModal() {
+            const modal = document.getElementById('uploadSyncModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function handleModalOverlayClick(e) {
+            if (e.target.id === 'uploadSyncModal') {
+                closeUploadModal();
+            }
+        }
+
+        function toggleTokenVisibility() {
+            const input = document.getElementById('tokenInput');
+            if (input) {
+                input.type = input.type === 'password' ? 'text' : 'password';
+            }
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropZone').classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropZone').classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('dropZone').classList.remove('dragover');
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                processFile(e.dataTransfer.files[0]);
+            }
+        }
+
+        function handleFileChange(e) {
+            if (e.target.files && e.target.files.length > 0) {
+                processFile(e.target.files[0]);
+            }
+        }
+
+        function processFile(file) {
+            if (!file.name.endsWith('.json')) {
+                showToast('请上传格式为 .json 的市场快照数据文件！');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (!Array.isArray(parsed)) {
+                        showToast('JSON 格式异常：数据应为一个数组列表！');
+                        return;
+                    }
+                    selectedFileContent = evt.target.result;
+                    selectedFileName = file.name;
+
+                    // 智能推测日期并填充目标路径
+                    let inferredDate = '';
+                    const dateMatch = file.name.match(/\d{4}-\d{2}-\d{2}/);
+                    if (dateMatch) {
+                        inferredDate = dateMatch[0];
+                    } else {
+                        inferredDate = new Date().toISOString().split('T')[0];
+                    }
+                    const targetInput = document.getElementById('targetFileNameInput');
+                    if (targetInput) {
+                        targetInput.value = `daily_json/gaijin_market_${inferredDate}.json`;
+                    }
+
+                    // 展示文件信息
+                    document.getElementById('dropZone').style.display = 'none';
+                    const badge = document.getElementById('fileInfoBadge');
+                    badge.style.display = 'flex';
+                    document.getElementById('fileInfoName').innerText = file.name;
+                    document.getElementById('fileInfoMeta').innerText = `有效条目: ${parsed.length} 件 | 大小: ${(file.size / 1024).toFixed(1)} KB | 推断快照日期: ${inferredDate}`;
+                    
+                    logSync(`已加载本地数据文件 [${file.name}]，包含 ${parsed.length} 条市场数据。`, 'info');
+                } catch (err) {
+                    showToast('无法解析此 JSON 文件，请检查文件完整性！');
+                }
+            };
+            reader.readAsText(file, 'utf-8');
+        }
+
+        function clearSelectedFile(e) {
+            if (e) e.stopPropagation();
+            selectedFileContent = null;
+            selectedFileName = '';
+            document.getElementById('jsonFileInput').value = '';
+            document.getElementById('fileInfoBadge').style.display = 'none';
+            document.getElementById('dropZone').style.display = 'block';
+            const logBox = document.getElementById('syncStatusLog');
+            if (logBox) logBox.style.display = 'none';
+        }
+
+        function logSync(msg, type = 'info') {
+            const logBox = document.getElementById('syncStatusLog');
+            if (!logBox) return;
+            logBox.style.display = 'block';
+            let color = 'var(--text-muted)';
+            if (type === 'success') color = 'var(--green)';
+            if (type === 'error') color = 'var(--red)';
+            if (type === 'warning') color = 'var(--orange)';
+            if (type === 'progress') color = 'var(--gold)';
+            
+            const timeStr = new Date().toLocaleTimeString();
+            const line = `<div style="color: ${color}; margin-bottom: 4px;">[${timeStr}] ${msg}</div>`;
+            logBox.innerHTML += line;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function utf8ToBase64(str) {
+            const bytes = new TextEncoder().encode(str);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return btoa(binary);
+        }
+
+        async function submitToGithub() {
+            if (!selectedFileContent) {
+                showToast('请先选择或拖入要上传的 JSON 数据文件！');
+                return;
+            }
+
+            const token = document.getElementById('tokenInput').value.trim();
+            const repo = document.getElementById('repoInput').value.trim();
+            const targetPath = document.getElementById('targetFileNameInput').value.trim();
+            const rememberToken = document.getElementById('rememberToken').checked;
+
+            if (!token) {
+                showToast('请填写 GitHub Personal Access Token (PAT)！');
+                document.getElementById('tokenInput').focus();
+                return;
+            }
+            if (!repo || !repo.includes('/')) {
+                showToast('请填写有效的仓库名 (格式如: 用户名/仓库名)！');
+                return;
+            }
+            if (!targetPath) {
+                showToast('请填写目标入库文件路径！');
+                return;
+            }
+
+            if (rememberToken) {
+                localStorage.setItem('wt_github_token', token);
+                localStorage.setItem('wt_github_repo_market', repo);
+            } else {
+                localStorage.removeItem('wt_github_token');
+            }
+
+            const btn = document.getElementById('startSyncBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span>⏳ 正在同步中...</span>';
+
+            const logBox = document.getElementById('syncStatusLog');
+            logBox.innerHTML = '';
+            logSync(`准备将数据同步至 GitHub 仓库: ${repo}`, 'progress');
+            logSync(`目标入库路径: ${targetPath}`, 'info');
+
+            try {
+                // 1. 检查文件是否已存在以获取 SHA (避免 422 冲突)
+                logSync(`正在校验远端分支文件状态...`, 'progress');
+                const apiUrl = `https://api.github.com/repos/${repo}/contents/${targetPath}`;
+                let existingSha = null;
+
+                const checkRes = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (checkRes.status === 200) {
+                    const checkData = await checkRes.json();
+                    existingSha = checkData.sha;
+                    logSync(`检测到同名历史快照已存在 (SHA: ${existingSha.substring(0, 7)})，将执行更新替换。`, 'warning');
+                } else if (checkRes.status === 404) {
+                    logSync(`远端尚无此日快照，将创建新文件。`, 'info');
+                } else if (checkRes.status === 401) {
+                    throw new Error('Token 无效或已过期，请检查 GitHub PAT 凭证！');
+                } else if (checkRes.status === 403) {
+                    throw new Error('Token 权限不足或触发 API 速率限制，请确保勾选了 repo 权限！');
+                }
+
+                // 2. 编码内容并推送
+                logSync(`正在上传数据并提交至 main 分支...`, 'progress');
+                const base64Content = utf8ToBase64(selectedFileContent);
+                const dateMatch = targetPath.match(/\d{4}-\d{2}-\d{2}/);
+                const snapshotDate = dateMatch ? dateMatch[0] : new Date().toISOString().split('T')[0];
+
+                const payload = {
+                    message: `feat(data): 上传最新市场数据快照 [${snapshotDate}] [skip ci]`,
+                    content: base64Content,
+                    branch: 'main'
+                };
+                if (existingSha) {
+                    payload.sha = existingSha;
+                }
+
+                const putRes = await fetch(apiUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!putRes.ok) {
+                    const errData = await putRes.json().catch(() => ({}));
+                    throw new Error(errData.message || `HTTP 错误 ${putRes.status}`);
+                }
+
+                const putData = await putRes.json();
+                const commitSha = putData.commit ? putData.commit.sha.substring(0, 7) : '';
+                
+                logSync(`🎉 提交成功！Commit: ${commitSha}`, 'success');
+                logSync(`🚀 GitHub Actions 流水线已自动被触发启动！`, 'success');
+                logSync(`⚡ 系统正在执行量化评估与页面生成，预计 1~2 分钟内完成全网自动更新。`, 'progress');
+
+                btn.innerHTML = '<span>✅ 同步成功</span>';
+                btn.style.background = 'var(--green)';
+                btn.style.color = '#0f1013';
+
+                // 提供 Actions 链接
+                const actionsUrl = `https://github.com/${repo}/actions`;
+                logSync(`<a href="${actionsUrl}" target="_blank" style="color: var(--gold-light); font-weight: bold; text-decoration: underline; display: inline-block; margin-top: 6px;">👉 点击前往 GitHub Actions 实时查看构建进度</a>`, 'info');
+
+                showToast('🎉 数据已成功同步到 GitHub，流水线正在自动更新中！');
+
+            } catch (error) {
+                logSync(`❌ 同步失败: ${error.message}`, 'error');
+                showToast(`同步失败: ${error.message}`);
+                btn.disabled = false;
+                btn.innerHTML = '<span>🚀 重新尝试上传</span>';
             }
         }
     </script>
+
+    <!-- GitHub 数据同步上传模态弹窗 -->
+    <div class="modal-overlay" id="uploadSyncModal" onclick="handleModalOverlayClick(event)">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--gold);"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/><polyline points="12 13 12 8 9 11"/><polyline points="12 8 15 11"/></svg>
+                    同步最新大盘快照到 GitHub
+                </h2>
+                <button class="modal-close" onclick="closeUploadModal()">&times;</button>
+            </div>
+
+            <!-- 文件拖拽上传区域 -->
+            <div class="drop-zone" id="dropZone" onclick="document.getElementById('jsonFileInput').click()" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                <div class="drop-zone-icon">📥</div>
+                <div style="font-weight: 600; color: var(--gold-light); margin-bottom: 4px;">点击或拖拽最新导出的 JSON 数据文件至此处</div>
+                <div class="drop-zone-text">支持 exporter.js 导出的 gaijin_market_*.json 文件</div>
+                <input type="file" id="jsonFileInput" accept=".json" style="display: none;" onchange="handleFileChange(event)">
+            </div>
+
+            <!-- 文件解析信息卡片 -->
+            <div class="file-info-badge" id="fileInfoBadge">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 16px;">📄</span>
+                    <div>
+                        <div id="fileInfoName" style="font-weight: 600; color: var(--text-main);">未选择文件</div>
+                        <div id="fileInfoMeta" style="font-size: 11px; color: var(--text-dark); margin-top: 2px;">解析中...</div>
+                    </div>
+                </div>
+                <button onclick="clearSelectedFile(event)" style="background: transparent; border: none; color: var(--red); font-size: 12px; cursor: pointer; padding: 4px;">移除</button>
+            </div>
+
+            <!-- 配置表单 -->
+            <div class="form-group">
+                <label class="form-label" for="repoInput">目标 GitHub 仓库 (Owner/Repo)</label>
+                <input type="text" id="repoInput" class="form-input" value="kangkang4468/wt-market-analyst" placeholder="例如: kangkang4468/wt-market-analyst">
+            </div>
+
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <label class="form-label" for="tokenInput" style="margin-bottom: 0;">GitHub Personal Access Token (PAT)</label>
+                    <a href="https://github.com/settings/tokens/new?scopes=repo&description=WT_Market_Sync" target="_blank" style="font-size: 11px; color: var(--gold); text-decoration: none;">🔑 申请 Token (勾选 repo)</a>
+                </div>
+                <div style="position: relative; margin-top: 6px;">
+                    <input type="password" id="tokenInput" class="form-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="padding-right: 40px;">
+                    <button type="button" onclick="toggleTokenVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text-dark); cursor: pointer; font-size: 14px;" title="显示/隐藏 Token">👁️</button>
+                </div>
+                <div class="token-tip">
+                    <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; color: var(--text-muted);">
+                        <input type="checkbox" id="rememberToken" checked style="accent-color: var(--gold);"> 在本浏览器记住 Token (仅保存在本地 localStorage)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="targetFileNameInput">入库文件路径</label>
+                <input type="text" id="targetFileNameInput" class="form-input" placeholder="daily_json/gaijin_market_YYYY-MM-DD.json">
+            </div>
+
+            <!-- 状态日志区域 -->
+            <div class="status-log" id="syncStatusLog"></div>
+
+            <!-- 操作按钮 -->
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeUploadModal()" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: var(--text-muted); padding: 11px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px;">取消</button>
+                <button type="button" id="startSyncBtn" class="btn-primary" onclick="submitToGithub()">
+                    <span>🚀 立即上传并触发云端构建</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
